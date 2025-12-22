@@ -35,9 +35,9 @@ spec:
 
     configuration:
       enabled: true
-      forceInit: false
+      forceInit: true
       trusted_proxies:
-        - 10.42.0.0/24 # k3s pod CIDR (Traefik pod IPs)
+        - 10.42.0.0/16 # k3s pod CIDR (Traefik pod IPs)
         - 127.0.0.1/32
 
     persistence:
