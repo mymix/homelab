@@ -54,7 +54,7 @@ spec:
         volumeMounts:
           - name: ha-config-src
             mountPath: /config-src
-          - name: apps-homeassistant
+          - name: apps-homeassistant-apps-homeassistant-0
             mountPath: /config
 
     persistence:
