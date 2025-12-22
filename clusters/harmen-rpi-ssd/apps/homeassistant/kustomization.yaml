@@ -9,5 +9,6 @@ generatorOptions:
   disableNameSuffixHash: true
 resources:
   - namespace.yaml
+  - pv.yaml
   - helmrepository.yaml
   - helmrelease.yaml

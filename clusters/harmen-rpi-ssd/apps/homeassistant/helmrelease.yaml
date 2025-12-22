@@ -61,11 +61,9 @@ spec:
         volumeMounts:
           - name: ha-config-src
             mountPath: /config-src
-          - name: apps-homeassistant-apps-homeassistant-0
+          - name: apps-homeassistant-pv-config
             mountPath: /config
 
     persistence:
       enabled: true
-      accessMode: ReadWriteOnce
-      size: 10Gi
-      storageClass: local-path
+      existingVolume: apps-homeassistant-pv-config
