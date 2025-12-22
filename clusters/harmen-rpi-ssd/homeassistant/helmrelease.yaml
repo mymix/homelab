@@ -19,21 +19,26 @@ spec:
         value: Europe/Amsterdam
 
     service:
-      main:
-        type: ClusterIP
-        ports:
-          http:
-            port: 8123
+      port: 8123
+    
+    hostNetwork: true
 
     ingress:
       enabled: true
-      labels: {}
-      annotations: {}
+      className: traefik
       hosts:
         - host: homeassistant.home.lan
           paths:
             - path: /
-              pathType: ImplementationSpecific
+              pathType: Prefix
+      tls: []
+
+    configuration:
+      enabled: true
+      forceInit: false
+      trusted_proxies:
+        - 10.42.0.0/24 # k3s pod CIDR (Traefik pod IPs)
+        - 127.0.0.1/32
 
     persistence:
       enabled: true
