@@ -16,6 +16,15 @@ spec:
   values:
     fullnameOverride: apps-homeassistant
 
+    podSecurityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: "OnRootMismatch"
+
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      allowPrivilegeEscalation: false
+
     env:
       - name: TZ
         value: Europe/Amsterdam
@@ -47,10 +56,8 @@ spec:
         args:
           - |
             set -e
-            for f in /config-src/*; do
-              [ -e "$f" ] || continue
-              cp -a "$f" /config/
-            done
+            cp -a /config-src/. /config/
+            chown -R 1000:1000 /config
         volumeMounts:
           - name: ha-config-src
             mountPath: /config-src
