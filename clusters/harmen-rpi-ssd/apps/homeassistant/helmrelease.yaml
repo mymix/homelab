@@ -14,6 +14,8 @@ spec:
         namespace: homeassistant
       version: "0.3.36"
   values:
+    fullnameOverride: apps-homeassistant
+
     env:
       - name: TZ
         value: Europe/Amsterdam
