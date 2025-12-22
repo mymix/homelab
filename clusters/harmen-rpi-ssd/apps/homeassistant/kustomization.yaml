@@ -4,7 +4,7 @@ namespace: homeassistant
 configMapGenerator:
   - name: ha-config
     files:
-      - config/
+      - config/configuration.yaml
 generatorOptions:
   disableNameSuffixHash: true
 resources:
