@@ -1,13 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: homeassistant
-metadata:
-  name: homeassistant-config
-
 configMapGenerator:
   - name: ha-config
     files:
-      - definitions # include all files in definitions/ into the ConfigMap
-
+      - config
 generatorOptions:
   disableNameSuffixHash: true

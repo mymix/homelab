@@ -3,5 +3,6 @@ kind: Kustomization
 namespace: homeassistant
 resources:
   - namespace.yaml
+  - configmap-configuration.yaml
   - helmrepository.yaml
   - helmrelease.yaml

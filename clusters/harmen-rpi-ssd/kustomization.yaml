@@ -2,6 +2,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - infra/flux-system
-  - config/homeassistant # make sure configmap is in place before starting homeassistant
   - apps/homeassistant
   
