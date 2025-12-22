@@ -33,12 +33,27 @@ spec:
               pathType: Prefix
       tls: []
 
-    configuration:
-      enabled: true
-      forceInit: true
-      trusted_proxies:
-        - 10.42.0.0/16 # k3s pod CIDR (Traefik pod IPs)
-        - 127.0.0.1/32
+    # add configuration-files as configmap and overwrite
+    additionalVolumes:
+      - name: ha-config-src
+        configMap:
+          name: ha-config
+    initContainers:
+      - name: seed-config
+        image: busybox:1.36
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            set -e
+            for f in /config-src/*; do
+              [ -e "$f" ] || continue
+              cp -a "$f" /config/
+            done
+        volumeMounts:
+          - name: ha-config-src
+            mountPath: /config-src
+          - name: homeassistant-home-assistant-pvc
+            mountPath: /config
 
     persistence:
       enabled: true

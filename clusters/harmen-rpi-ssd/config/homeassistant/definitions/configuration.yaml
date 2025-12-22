@@ -1,0 +1,16 @@
+# load basic home-assistant configuration
+default_config:
+
+# Configure Home Assistant to work behind a reverse proxy
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 10.42.0.0/16 # traefik internal network
+    - 127.0.0.1/32 # localhost
+
+# frontend:
+#   themes: !include_dir_merge_named themes
+
+# automation: !include automations.yaml
+# script: !include scripts.yaml
+# scene: !include scenes.yaml
