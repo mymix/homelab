@@ -31,6 +31,13 @@ spec:
                 secretKeyRef:
                   name: ha-onboarding-admin
                   key: password
+            - name: HA_LANGUAGE
+              valueFrom:
+                secretKeyRef:
+                  name: ha-onboarding-admin
+                  key: language
+            - name: HA_CLIENT_ID
+              value: "http://homeassistant.home.lan"
           args:
             - |
               set -euo pipefail
@@ -69,7 +76,9 @@ spec:
                       --arg name "$HA_NAME" \
                       --arg username "$HA_USERNAME" \
                       --arg password "$HA_PASSWORD" \
-                      '{name:$name, username:$username, password:$password}')")"
+                      --arg client_id "$HA_CLIENT_ID" \
+                      --arg language "$HA_LANGUAGE" \
+                      '{name:$name, username:$username, password:$password, client_id:$client_id}')")"
 
               echo "POST /api/onboarding/users HTTP=$create_code"
               cat /tmp/ha_create.json || true
@@ -91,3 +100,4 @@ stringData:
   name: "Home Assistant Administrator"
   username: admin
   password: admin
+  language: nl-NL
