@@ -1,6 +1,6 @@
 # load basic home-assistant configuration
 # assist_pipeline:
-# bluetooth:#
+# bluetooth:
 # cloud:
 # conversation:
 dhcp:
