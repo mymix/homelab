@@ -1,6 +1,16 @@
 # load basic home-assistant configuration
 default_config:
 
+# Settings for instance
+homeassistant:
+  name: Thuis
+  latitude: 52.15869
+  longitude: 4.50890
+  unit_system: metric
+  time_zone: Europe/Amsterdam
+  country: NL
+  language: nl
+
 # Configure Home Assistant to work behind a reverse proxy
 http:
   use_x_forwarded_for: true
