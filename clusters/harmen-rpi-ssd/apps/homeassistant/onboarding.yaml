@@ -44,11 +44,10 @@ spec:
 
               echo "Installing curl + jq…"
               apk add --no-cache curl jq
-              
+
               ONBOARDING_URL="$HA_URL/api/onboarding"
 
-              echo "Waiting for HA onboarding endpoint:…"
-              echo "$ONBOARDING_URL"
+              echo "Waiting for HA onboarding endpoint…"
               until curl -s "$ONBOARDING_URL" | jq . >/dev/null 2>&1; do
                 echo "   not available yet, retrying in 3s…"
                 sleep 3
@@ -57,38 +56,95 @@ spec:
               echo "Onboarding state:"
               curl -s "$ONBOARDING_URL" | jq .
 
-              # Check if user step is already done
               user_done="$(curl -s "$ONBOARDING_URL" | jq -r '.[] | select(.step=="user") | .done')"
+              core_done="$(curl -s "$ONBOARDING_URL" | jq -r '.[] | select(.step=="core_config") | .done')"
 
               echo "user_done=$user_done"
+              echo "core_done=$core_done"
 
-              if [ "$user_done" = "true" ]; then
-                echo "User already created → exiting"
+              if [ "$user_done" = "true" ] && [ "$core_done" = "true" ]; then
+                echo "User + core_config already done → exiting"
                 exit 0
               fi
 
-              echo "Creating initial Home Assistant user…"
+              if [ "$user_done" != "true" ]; then
+                echo "Creating initial Home Assistant user…"
 
-              create_code="$(curl -s -o /tmp/ha_create.json -w "%{http_code}" \
-                -X POST "$HA_URL/api/onboarding/users" \
-                -H "Content-Type: application/json" \
-                -d "$(jq -n \
-                      --arg name "$HA_NAME" \
-                      --arg username "$HA_USERNAME" \
-                      --arg password "$HA_PASSWORD" \
-                      --arg client_id "$HA_CLIENT_ID" \
-                      --arg language "$HA_LANGUAGE" \
-                      '{name:$name, username:$username, password:$password, client_id:$client_id, language:$language}')" )"
+                create_code="$(curl -s -o /tmp/ha_create.json -w "%{http_code}" \
+                  -X POST "$HA_URL/api/onboarding/users" \
+                  -H "Content-Type: application/json" \
+                  -d "$(jq -n \
+                        --arg name "$HA_NAME" \
+                        --arg username "$HA_USERNAME" \
+                        --arg password "$HA_PASSWORD" \
+                        --arg client_id "$HA_CLIENT_ID" \
+                        --arg language "$HA_LANGUAGE" \
+                        '{name:$name, username:$username, password:$password, client_id:$client_id, language:$language}')" )"
 
-              echo "POST /api/onboarding/users HTTP=$create_code"
-              cat /tmp/ha_create.json || true
+                echo "POST /api/onboarding/users HTTP=$create_code"
+                cat /tmp/ha_create.json || true
 
-              if [ "$create_code" != "200" ]; then
-                echo "User creation failed"
+                if [ "$create_code" != "200" ]; then
+                  echo "User creation failed"
+                  exit 1
+                fi
+
+                AUTH_CODE="$(jq -r '.auth_code // empty' /tmp/ha_create.json)"
+                if [ -z "$AUTH_CODE" ]; then
+                  echo "Missing auth_code in response"
+                  exit 1
+                fi
+
+                echo "User created successfully"
+              else
+                echo "User step already done; cannot mint token via onboarding/users anymore."
+                echo "If core_config is still false, you'll need an existing long-lived token to call /api/onboarding/core_config."
                 exit 1
               fi
 
-              echo "User created successfully"
+              echo "Exchanging auth_code for access token…"
+              token_code="$(curl -s -o /tmp/ha_token.json -w "%{http_code}" \
+                -X POST "$HA_URL/auth/token" \
+                -H "Content-Type: application/x-www-form-urlencoded" \
+                --data-urlencode "grant_type=authorization_code" \
+                --data-urlencode "code=$AUTH_CODE" \
+                --data-urlencode "client_id=$HA_CLIENT_ID")"
+
+              echo "POST /auth/token HTTP=$token_code"
+              cat /tmp/ha_token.json || true
+
+              if [ "$token_code" != "200" ]; then
+                echo "Token exchange failed"
+                exit 1
+              fi
+
+              ACCESS_TOKEN="$(jq -r '.access_token // empty' /tmp/ha_token.json)"
+              if [ -z "$ACCESS_TOKEN" ]; then
+                echo "Missing access_token in token response"
+                exit 1
+              fi
+
+              if [ "$core_done" != "true" ]; then
+                echo "Marking core_config as done…"
+                core_code="$(curl -s -o /tmp/ha_core.json -w "%{http_code}" \
+                  -X POST "$HA_URL/api/onboarding/core_config" \
+                  -H "Authorization: Bearer $ACCESS_TOKEN")"
+
+                echo "POST /api/onboarding/core_config HTTP=$core_code"
+                cat /tmp/ha_core.json || true
+
+                if [ "$core_code" != "200" ]; then
+                  echo "core_config step failed"
+                  exit 1
+                fi
+
+                echo "core_config marked done"
+              else
+                echo "core_config already done"
+              fi
+
+              echo "Final onboarding state:"
+              curl -s "$ONBOARDING_URL" | jq .
 ---
 apiVersion: v1
 kind: Secret
