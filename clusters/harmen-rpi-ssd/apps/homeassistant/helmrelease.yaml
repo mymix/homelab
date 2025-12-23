@@ -22,14 +22,15 @@ spec:
       type: Deployment
     deploymentStrategy: Recreate
 
-    podSecurityContext:
-      fsGroup: 1000
-      fsGroupChangePolicy: "OnRootMismatch"
-
+    podSecurityContext: {}
     securityContext:
-      runAsUser: 1000
-      runAsGroup: 1000
+      privileged: false
       allowPrivilegeEscalation: false
+      runAsNonRoot: false
+      capabilities:
+        add: ["NET_RAW", "NET_ADMIN"]
+      seccompProfile:
+        type: RuntimeDefault
 
     env:
       - name: TZ
