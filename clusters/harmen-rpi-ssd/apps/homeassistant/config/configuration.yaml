@@ -20,6 +20,9 @@ http:
     - 10.42.0.0/16 # traefik internal network
     - 127.0.0.1/32 # localhost
 
+# Homekit
+homekit: !include homekit.yaml
+
 # frontend:
 #   themes: !include_dir_merge_named themes
 

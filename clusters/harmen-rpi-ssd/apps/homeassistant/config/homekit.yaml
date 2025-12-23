@@ -1,0 +1,7 @@
+  - name: HOMEKIT-BRDG-CLIMATE
+    port: 21065
+    filter:
+      include_domains:
+        - climate
+      # include_entity_globs:
+        # - sensor.*_humidity
