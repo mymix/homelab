@@ -1,5 +1,25 @@
 # load basic home-assistant configuration
-default_config:
+# assist_pipeline:
+# bluetooth:#
+# cloud:
+# conversation:
+dhcp:
+energy:
+file:
+# go2rtc:
+history:
+homeassistant_alerts:
+logbook:
+media_source:
+mobile_app:
+# my:
+ssdp:
+# stream:
+sun:
+usage_prediction:
+usb:
+webhook:
+zeroconf:
 
 # Settings for instance
 homeassistant:
@@ -19,6 +39,10 @@ http:
   trusted_proxies:
     - 10.42.0.0/16 # traefik internal network
     - 127.0.0.1/32 # localhost
+
+# disable bluetooth
+bluetooth:
+  disable_bluetooth: true
 
 # Homekit
 homekit: !include homekit.yaml
