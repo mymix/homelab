@@ -11,7 +11,8 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: onboard
-          image: ghcr.io/jqlang/jq:1.7
+          image: alpine:latest
+          command: ["/bin/sh","-lc"]
           env:
             - name: HA_URL
               value: "http://apps-homeassistant.homeassistant.svc.cluster.local:8123"
@@ -30,10 +31,12 @@ spec:
                 secretKeyRef:
                   name: ha-onboarding-admin
                   key: password
-          command: ["/bin/sh","-lc"]
           args:
             - |
               set -euo pipefail
+
+              echo "Installing curl + jq…"
+              apk add --no-cache curl jq
               
               ONBOARDING_URL="$HA_URL/api/onboarding"
 
