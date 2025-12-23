@@ -10,6 +10,8 @@ homeassistant:
   time_zone: Europe/Amsterdam
   country: NL
   language: nl
+  temperature_unit: C
+  external_url: "http://homeassistant.home.lan"
 
 # Configure Home Assistant to work behind a reverse proxy
 http:
