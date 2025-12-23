@@ -58,9 +58,11 @@ spec:
 
               user_done="$(curl -s "$ONBOARDING_URL" | jq -r '.[] | select(.step=="user") | .done')"
               core_done="$(curl -s "$ONBOARDING_URL" | jq -r '.[] | select(.step=="core_config") | .done')"
+              analytics_done="$(curl -s "$ONBOARDING_URL" | jq -r '.[] | select(.step=="analytics") | .done')"
 
               echo "user_done=$user_done"
               echo "core_done=$core_done"
+              echo "analytics_done=$analytics_done"
 
               if [ "$user_done" = "true" ] && [ "$core_done" = "true" ]; then
                 echo "User + core_config already done → exiting"
@@ -141,6 +143,27 @@ spec:
                 echo "core_config marked done"
               else
                 echo "core_config already done"
+              fi
+
+              if [ "$analytics_done" != "true" ]; then
+                echo "Opting out of analytics…"
+                analytics_code="$(curl -s -o /tmp/ha_analytics.json -w "%{http_code}" \
+                  -X POST "$HA_URL/api/onboarding/analytics" \
+                  -H "Authorization: Bearer $ACCESS_TOKEN" \
+                  -H "Content-Type: application/json" \
+                  -d '{"preferences":{"base":false,"diagnostics":false,"usage":false}}')"
+
+                echo "POST /api/onboarding/analytics HTTP=$analytics_code"
+                cat /tmp/ha_analytics.json || true
+
+                if [ "$analytics_code" != "200" ]; then
+                  echo "analytics step failed"
+                  exit 1
+                fi
+
+                echo "analytics opt-out recorded"
+              else
+                echo "analytics already done"
               fi
 
               echo "Final onboarding state:"
