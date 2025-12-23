@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: ha-onboarding
+  namespace: homeassistant
 spec:
   backoffLimit: 3
   ttlSecondsAfterFinished: 300
@@ -51,6 +52,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: ha-onboarding
+  namespace: homeassistant
 type: Opaque
 stringData:
   username: admin
