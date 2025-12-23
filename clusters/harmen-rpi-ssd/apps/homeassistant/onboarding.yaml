@@ -32,10 +32,15 @@ spec:
             - |
               set -euo pipefail
 
-              echo "Waiting for HA at $HA_URL ..."
-              until curl -sf "$HA_URL/api/" >/dev/null; do sleep 2; done
+              echo "Waiting for HA onboarding status at $HA_URL ..."
+              # Wait until onboarding endpoint responds (no auth required)
+              until curl -sf "$HA_URL/api/onboarding/status" >/dev/null; do
+                sleep 3
+              done
 
               onboarding="$(curl -sf "$HA_URL/api/onboarding/status" | sed -n 's/.*"onboarding":\s*\(true\|false\).*/\1/p')"
+              echo "onboarding=$onboarding"
+
               if [ "$onboarding" = "false" ]; then
                 echo "Onboarding already completed; exiting."
                 exit 0
