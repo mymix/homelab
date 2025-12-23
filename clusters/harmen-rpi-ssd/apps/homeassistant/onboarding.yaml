@@ -59,10 +59,12 @@ spec:
               user_done="$(curl -s "$ONBOARDING_URL" | jq -r '.[] | select(.step=="user") | .done')"
               core_done="$(curl -s "$ONBOARDING_URL" | jq -r '.[] | select(.step=="core_config") | .done')"
               analytics_done="$(curl -s "$ONBOARDING_URL" | jq -r '.[] | select(.step=="analytics") | .done')"
+              integration_done="$(curl -s "$ONBOARDING_URL" | jq -r '.[] | select(.step=="integration") | .done')"
 
               echo "user_done=$user_done"
               echo "core_done=$core_done"
               echo "analytics_done=$analytics_done"
+              echo "integration_done=$integration_done"
 
               ACCESS_TOKEN=""
 
@@ -165,6 +167,29 @@ spec:
                 echo "analytics already done"
               else
                 echo "analytics pending but no access token available; skipping"
+              fi
+
+              if [ "$integration_done" != "true" ] && [ -n "$ACCESS_TOKEN" ]; then
+                echo "Completing integration step…"
+                integration_code="$(curl -s -o /tmp/ha_integration.json -w "%{http_code}" \
+                  -X POST "$HA_URL/api/onboarding/integration" \
+                  -H "Authorization: Bearer $ACCESS_TOKEN" \
+                  -H "Content-Type: application/json" \
+                  -d "$(jq -n --arg client_id "$HA_CLIENT_ID" --arg redirect_uri "$HA_CLIENT_ID" '{client_id:$client_id, redirect_uri:$redirect_uri}')")"
+
+                echo "POST /api/onboarding/integration HTTP=$integration_code"
+                cat /tmp/ha_integration.json || true
+
+                if [ "$integration_code" != "200" ]; then
+                  echo "integration step failed"
+                  exit 1
+                fi
+
+                echo "integration step completed"
+              elif [ "$integration_done" = "true" ]; then
+                echo "integration already done"
+              else
+                echo "integration pending but no access token available; skipping"
               fi
 
               echo "Final onboarding state:"
