@@ -11,7 +11,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: onboard
-          image: curlimages/curl:8.10.1
+          image: ghcr.io/jqlang/jq:1.7
           env:
             - name: HA_URL
               value: "http://apps-homeassistant.homeassistant.svc.cluster.local:8123"
@@ -37,8 +37,10 @@ spec:
               
               ONBOARDING_URL="$HA_URL/api/onboarding"
 
-              echo "Waiting for HA onboarding endpoint…"
+              echo "Waiting for HA onboarding endpoint:…"
+              echo "$ONBOARDING_URL"
               until curl -s "$ONBOARDING_URL" | jq . >/dev/null 2>&1; do
+                echo "   not available yet, retrying in 3s…"
                 sleep 3
               done
 
