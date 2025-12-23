@@ -16,6 +16,12 @@ spec:
   values:
     fullnameOverride: apps-homeassistant
 
+    # use type deployment and recreate, 
+    # because volume with local-path can only handle RWO
+    controller:
+      type: Deployment
+    deploymentStrategy: Recreate
+
     podSecurityContext:
       fsGroup: 1000
       fsGroupChangePolicy: "OnRootMismatch"
@@ -61,9 +67,9 @@ spec:
         volumeMounts:
           - name: ha-config-src
             mountPath: /config-src
-          - name: apps-homeassistant-pv-config
+          - name: apps-homeassistant-pvc
             mountPath: /config
 
     persistence:
       enabled: true
-      existingVolume: apps-homeassistant-pv-config
+      existingClaim: apps-homeassistant-pvc
