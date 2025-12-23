@@ -64,10 +64,7 @@ spec:
               echo "core_done=$core_done"
               echo "analytics_done=$analytics_done"
 
-              if [ "$user_done" = "true" ] && [ "$core_done" = "true" ]; then
-                echo "User + core_config already done → exiting"
-                exit 0
-              fi
+              ACCESS_TOKEN=""
 
               if [ "$user_done" != "true" ]; then
                 echo "Creating initial Home Assistant user…"
@@ -100,33 +97,33 @@ spec:
                 echo "User created successfully"
               else
                 echo "User step already done; cannot mint token via onboarding/users anymore."
-                echo "If core_config is still false, you'll need an existing long-lived token to call /api/onboarding/core_config."
-                exit 1
               fi
 
-              echo "Exchanging auth_code for access token…"
-              token_code="$(curl -s -o /tmp/ha_token.json -w "%{http_code}" \
-                -X POST "$HA_URL/auth/token" \
-                -H "Content-Type: application/x-www-form-urlencoded" \
-                --data-urlencode "grant_type=authorization_code" \
-                --data-urlencode "code=$AUTH_CODE" \
-                --data-urlencode "client_id=$HA_CLIENT_ID")"
+              if [ -z "$ACCESS_TOKEN" ] && [ -n "${AUTH_CODE:-}" ]; then
+                echo "Exchanging auth_code for access token…"
+                token_code="$(curl -s -o /tmp/ha_token.json -w "%{http_code}" \
+                  -X POST "$HA_URL/auth/token" \
+                  -H "Content-Type: application/x-www-form-urlencoded" \
+                  --data-urlencode "grant_type=authorization_code" \
+                  --data-urlencode "code=$AUTH_CODE" \
+                  --data-urlencode "client_id=$HA_CLIENT_ID")"
 
-              echo "POST /auth/token HTTP=$token_code"
-              cat /tmp/ha_token.json || true
+                echo "POST /auth/token HTTP=$token_code"
+                cat /tmp/ha_token.json || true
 
-              if [ "$token_code" != "200" ]; then
-                echo "Token exchange failed"
-                exit 1
+                if [ "$token_code" != "200" ]; then
+                  echo "Token exchange failed"
+                  exit 1
+                fi
+
+                ACCESS_TOKEN="$(jq -r '.access_token // empty' /tmp/ha_token.json)"
+                if [ -z "$ACCESS_TOKEN" ]; then
+                  echo "Missing access_token in token response"
+                  exit 1
+                fi
               fi
 
-              ACCESS_TOKEN="$(jq -r '.access_token // empty' /tmp/ha_token.json)"
-              if [ -z "$ACCESS_TOKEN" ]; then
-                echo "Missing access_token in token response"
-                exit 1
-              fi
-
-              if [ "$core_done" != "true" ]; then
+              if [ "$core_done" != "true" ] && [ -n "$ACCESS_TOKEN" ]; then
                 echo "Marking core_config as done…"
                 core_code="$(curl -s -o /tmp/ha_core.json -w "%{http_code}" \
                   -X POST "$HA_URL/api/onboarding/core_config" \
@@ -141,11 +138,13 @@ spec:
                 fi
 
                 echo "core_config marked done"
-              else
+              elif [ "$core_done" = "true" ]; then
                 echo "core_config already done"
+              else
+                echo "core_config pending but no access token available; skipping"
               fi
 
-              if [ "$analytics_done" != "true" ]; then
+              if [ "$analytics_done" != "true" ] && [ -n "$ACCESS_TOKEN" ]; then
                 echo "Opting out of analytics…"
                 analytics_code="$(curl -s -o /tmp/ha_analytics.json -w "%{http_code}" \
                   -X POST "$HA_URL/api/onboarding/analytics" \
@@ -162,8 +161,10 @@ spec:
                 fi
 
                 echo "analytics opt-out recorded"
-              else
+              elif [ "$analytics_done" = "true" ]; then
                 echo "analytics already done"
+              else
+                echo "analytics pending but no access token available; skipping"
               fi
 
               echo "Final onboarding state:"
