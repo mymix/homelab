@@ -100,4 +100,4 @@ stringData:
   name: "Home Assistant Administrator"
   username: admin
   password: admin
-  language: nl-NL
+  language: "nl-NL"
