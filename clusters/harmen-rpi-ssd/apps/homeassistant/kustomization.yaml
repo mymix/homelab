@@ -5,6 +5,7 @@ configMapGenerator:
   - name: ha-config
     files:
       - config/configuration.yaml
+      - config/homekit.yaml
 generatorOptions:
   disableNameSuffixHash: true
 resources:
