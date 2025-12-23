@@ -21,6 +21,8 @@ spec:
     controller:
       type: Deployment
     deploymentStrategy: Recreate
+    deploymentAnnotations:
+      reloader.stakater.com/auto: "true"
 
     podSecurityContext: {}
     securityContext:
