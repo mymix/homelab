@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - infra/flux-system
   - infra/stakater-reloader
+  - infra/traefik
   - apps/mosquitto
   - apps/homeassistant
 
