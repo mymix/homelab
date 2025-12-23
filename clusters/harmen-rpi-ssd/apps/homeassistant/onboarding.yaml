@@ -16,16 +16,19 @@ spec:
             - name: HA_URL
               value: "http://apps-homeassistant.homeassistant.svc.cluster.local:8123"
             - name: HA_NAME
-              value: "Home Assistant Administrator"
+              valueFrom:
+                secretKeyRef:
+                  name: ha-onboarding-admin
+                  key: name
             - name: HA_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: ha-onboarding
+                  name: ha-onboarding-admin
                   key: username
             - name: HA_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ha-onboarding
+                  name: ha-onboarding-admin
                   key: password
           command: ["/bin/sh","-lc"]
           args:
@@ -56,9 +59,10 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: ha-onboarding
+  name: ha-onboarding-admin
   namespace: homeassistant
 type: Opaque
 stringData:
+  name: "Home Assistant Administrator"
   username: admin
   password: admin
