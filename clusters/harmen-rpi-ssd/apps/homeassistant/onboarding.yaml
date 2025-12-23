@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ha-onboarding
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: onboard
+          image: curlimages/curl:8.10.1
+          env:
+            - name: HA_URL
+              value: "http://apps-homeassistant.homeassistant.svc.cluster.local:8123"
+            - name: HA_NAME
+              value: "Home Assistant Administrator"
+            - name: HA_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ha-onboarding
+                  key: username
+            - name: HA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ha-onboarding
+                  key: password
+          command: ["/bin/sh","-lc"]
+          args:
+            - |
+              set -euo pipefail
+
+              echo "Waiting for HA at $HA_URL ..."
+              until curl -sf "$HA_URL/api/" >/dev/null; do sleep 2; done
+
+              onboarding="$(curl -sf "$HA_URL/api/onboarding/status" | sed -n 's/.*"onboarding":\s*\(true\|false\).*/\1/p')"
+              if [ "$onboarding" = "false" ]; then
+                echo "Onboarding already completed; exiting."
+                exit 0
+              fi
+
+              echo "Creating initial user..."
+              curl -sf -X POST "$HA_URL/api/onboarding/users" \
+                -H "Content-Type: application/json" \
+                -d "{\"name\":\"${HA_NAME}\",\"username\":\"${HA_USERNAME}\",\"password\":\"${HA_PASSWORD}\"}"
+
+              echo "Done."
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ha-onboarding
+type: Opaque
+stringData:
+  username: admin
+  password: admin
