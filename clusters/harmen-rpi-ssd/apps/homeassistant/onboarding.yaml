@@ -78,7 +78,7 @@ spec:
                       --arg password "$HA_PASSWORD" \
                       --arg client_id "$HA_CLIENT_ID" \
                       --arg language "$HA_LANGUAGE" \
-                      '{name:$name, username:$username, password:$password, client_id:$client_id}')")"
+                      '{name:$name, username:$username, password:$password, client_id:$client_id, language:$language}')" )"
 
               echo "POST /api/onboarding/users HTTP=$create_code"
               cat /tmp/ha_create.json || true
@@ -100,4 +100,4 @@ stringData:
   name: "Home Assistant Administrator"
   username: admin
   password: admin
-  language: "nl-NL"
+  language: "nl"
