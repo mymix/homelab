@@ -34,27 +34,47 @@ spec:
           args:
             - |
               set -euo pipefail
+              
+              ONBOARDING_URL="$HA_URL/api/onboarding"
 
-              echo "Waiting for HA onboarding status at $HA_URL ..."
-              # Wait until onboarding endpoint responds (no auth required)
-              until curl -sf "$HA_URL/api/onboarding/status" >/dev/null; do
+              echo "Waiting for HA onboarding endpoint…"
+              until curl -s "$ONBOARDING_URL" | jq . >/dev/null 2>&1; do
                 sleep 3
               done
 
-              onboarding="$(curl -sf "$HA_URL/api/onboarding/status" | sed -n 's/.*"onboarding":\s*\(true\|false\).*/\1/p')"
-              echo "onboarding=$onboarding"
+              echo "Onboarding state:"
+              curl -s "$ONBOARDING_URL" | jq .
 
-              if [ "$onboarding" = "false" ]; then
-                echo "Onboarding already completed; exiting."
+              # Check if user step is already done
+              user_done="$(curl -s "$ONBOARDING_URL" | jq -r '.[] | select(.step=="user") | .done')"
+
+              echo "user_done=$user_done"
+
+              if [ "$user_done" = "true" ]; then
+                echo "User already created → exiting"
                 exit 0
               fi
 
-              echo "Creating initial user..."
-              curl -sf -X POST "$HA_URL/api/onboarding/users" \
-                -H "Content-Type: application/json" \
-                -d "{\"name\":\"${HA_NAME}\",\"username\":\"${HA_USERNAME}\",\"password\":\"${HA_PASSWORD}\"}"
+              echo "Creating initial Home Assistant user…"
 
-              echo "Done."
+              create_code="$(curl -s -o /tmp/ha_create.json -w "%{http_code}" \
+                -X POST "$HA_URL/api/onboarding/users" \
+                -H "Content-Type: application/json" \
+                -d "$(jq -n \
+                      --arg name "$HA_NAME" \
+                      --arg username "$HA_USERNAME" \
+                      --arg password "$HA_PASSWORD" \
+                      '{name:$name, username:$username, password:$password}')")"
+
+              echo "POST /api/onboarding/users HTTP=$create_code"
+              cat /tmp/ha_create.json || true
+
+              if [ "$create_code" != "200" ]; then
+                echo "User creation failed"
+                exit 1
+              fi
+
+              echo "User created successfully"
 ---
 apiVersion: v1
 kind: Secret
