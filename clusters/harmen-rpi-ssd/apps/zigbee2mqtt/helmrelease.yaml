@@ -16,6 +16,10 @@ spec:
         namespace: zigbee2mqtt
       interval: 10m
   values:
+    fullnameOverride: zigbee2mqtt
+    nodeSelector:
+      kubernetes.io/hostname: harmen-rpi-ssd
+
     service:
       type: ClusterIP
       port: 80
@@ -33,5 +37,9 @@ spec:
     
     mqtt:
       server: 'mqtt://mosquitto.home.lan:1883'
+    usb:
+      enabled: true
+      device: /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2456829-if00
+    tolerations: []
     
     
