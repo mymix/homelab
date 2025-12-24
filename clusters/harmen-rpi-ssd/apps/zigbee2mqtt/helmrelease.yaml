@@ -1,0 +1,37 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: zigbee2mqtt
+  namespace: zigbee2mqtt
+spec:
+  interval: 5m
+  targetNamespace: zigbee2mqtt
+  chart:
+    spec:
+      chart: zigbee2mqtt
+      version: 2.7.1
+      sourceRef:
+        kind: HelmRepository
+        name: zigbee2mqtt
+        namespace: zigbee2mqtt
+      interval: 10m
+  values:
+    service:
+      type: ClusterIP
+      port: 80
+
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      hosts:
+        - host: zigbee2mqtt.home.lan
+          paths:  
+            - path: /
+              pathType: Prefix
+            - path: /api/
+              pathType: Prefix
+    
+    mqtt:
+      server: 'mqtt://mosquitto.home.lan:1883'
+    
+    

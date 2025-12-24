@@ -5,6 +5,7 @@ resources:
   - infra/stakater-reloader
   - infra/traefik
   - apps/mosquitto
+  - apps/zigbee2mqtt
   - apps/homeassistant
 
   
