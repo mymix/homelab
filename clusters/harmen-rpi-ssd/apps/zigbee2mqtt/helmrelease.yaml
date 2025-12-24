@@ -35,11 +35,10 @@ spec:
             - path: /api/
               pathType: Prefix
     
-    mqtt:
-      server: 'mqtt://mosquitto.home.lan:1883'
-    usb:
-      enabled: true
-      device: /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2456829-if00
-    tolerations: []
+    zigbee2mqtt:
+      mqtt:
+        server: "mqtt://mosquitto.home.lan:1883"
+      serial:
+        port: "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2456829-if00"
     
     
