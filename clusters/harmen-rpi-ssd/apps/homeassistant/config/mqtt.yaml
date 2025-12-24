@@ -1,6 +1,6 @@
   discovery: true
-  discovery_prefix: <your_discovery_prefix>
-  broker: [YOUR MQTT BROKER] # Remove if you want to use builtin-in MQTT broker
+  discovery_prefix: homeassistant
+  broker: mosquitto.home.lan
   birth_message:
     topic: 'homeassistant/status'
     payload: 'online'
