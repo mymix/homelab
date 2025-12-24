@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deconz
+  namespace: deconz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deconz
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: deconz
+    spec:
+      containers:
+        - name: deconz
+          image: deconzcommunity/deconz:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          env:
+            - name: TZ
+              value: Europe/Amsterdam
+            - name: DECONZ_DEVICE
+              value: /dev/ttyACM1
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: config
+              mountPath: /opt/deCONZ
+            # - name: usb
+              # mountPath: /dev/ttyACM1
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: deconz-data
+        # - name: usb
+          # hostPath:
+            # path: /dev/ttyACM1
+            # type: CharDevice

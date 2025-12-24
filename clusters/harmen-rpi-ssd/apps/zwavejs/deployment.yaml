@@ -15,16 +15,36 @@ spec:
       labels:
         app: zwavejs
     spec:
-      hostNetwork: false
       containers:
         - name: zwavejs
           image: ghcr.io/zwave-js/zwave-js-ui:latest
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              httpHeaders:
+              - name: Accept
+                value: text/plain
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
           ports:
-            - name: http
-              containerPort: 8091
-            - name: ws
-              containerPort: 3000
+            - containerPort: 8091
+              name: http
+              protocol: TCP
+            - containerPort: 3000
+              name: websocket
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi
+            requests:
+              cpu: "1"
+              memory: 400Mi
           env:
             - name: TZ
               value: Europe/Amsterdam
@@ -36,6 +56,8 @@ spec:
               value: mqtt://mosquitto.home.lan
             - name: MQTT_PORT
               value: "1883"
+            - name: TRUST_PROXY
+              value: "10.42.0.0/16" # traefik internal cluster CIDR
           securityContext:
             privileged: true
           volumeMounts:

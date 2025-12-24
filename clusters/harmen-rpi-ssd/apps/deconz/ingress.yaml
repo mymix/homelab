@@ -1,18 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: zwavejs
-  namespace: zwavejs
+  name: deconz
+  namespace: deconz
 spec:
   ingressClassName: traefik
   rules:
-    - host: zwavejs.home.lan
+    - host: deconz.home.lan
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: zwavejs
+                name: deconz
                 port:
                   name: http
