@@ -15,6 +15,8 @@ spec:
       labels:
         app: zwavejs
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: harmen-rpi-ssd
       containers:
         - name: zwavejs
           image: ghcr.io/zwave-js/zwave-js-ui:latest
@@ -61,15 +63,15 @@ spec:
           securityContext:
             privileged: true
           volumeMounts:
-            - name: data
+            - name: zwave-data
               mountPath: /usr/src/app/store
-            - name: usb
-              mountPath: /dev/ttyACM0
+            - name: zwave-usb
+              mountPath: /dev/zwave
       volumes:
-        - name: data
+        - name: zwave-data
           persistentVolumeClaim:
             claimName: zwavejs-data
-        - name: usb
+        - name: zwave-usb
           hostPath:
             path: "/dev/serial/by-id/usb-0658_0200-if00"
             type: CharDevice
