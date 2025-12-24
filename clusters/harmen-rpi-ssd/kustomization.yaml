@@ -7,8 +7,8 @@ resources:
   - infra/cert-manager
   - apps/mosquitto
   - apps/grafana
-  - apps/deconz
-  - apps/zwavejs
+  # - apps/deconz # disabled because only one app can use usb
+  - apps/zwavejs 
   - apps/zigbee2mqtt
   - apps/homeassistant
 
