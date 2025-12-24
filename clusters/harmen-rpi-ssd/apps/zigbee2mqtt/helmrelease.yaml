@@ -17,8 +17,18 @@ spec:
       interval: 10m
   values:
     fullnameOverride: zigbee2mqtt
-    nodeSelector:
-      kubernetes.io/hostname: harmen-rpi-ssd
+
+    statefulset:
+      nodeSelector:
+        - harmen-rpi-ssd
+      volumes:
+        - name: usb
+          hostPath:
+            path: /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2456829-if00
+            type: CharDevice
+      volumeMounts:
+        - name: usb
+          mountPath: /dev/serial/by-id/deconz
 
     service:
       type: ClusterIP
@@ -34,11 +44,12 @@ spec:
               pathType: Prefix
             - path: /api/
               pathType: Prefix
-    
+
     zigbee2mqtt:
       mqtt:
         server: "mqtt://mosquitto.home.lan:1883"
       serial:
-        port: "/dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2456829-if00"
+        adapter: deconz
+        port: "/dev/serial/by-id/deconz"
     
     
