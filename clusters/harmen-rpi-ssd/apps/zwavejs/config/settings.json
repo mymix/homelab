@@ -5,10 +5,28 @@
     "useHttps": false
   },
   "mqtt": {
-    "server": "mqtt://mosquitto.home.lan:1883",
+    "host": "mqtt://mosquitto.home.lan",
+    "port": 1883,
     "name": "zwavejs"
   },
-  "securityKeys": {
-    "S0_Legacy": "REPLACE_WITH_HEX_KEY_4"
+  "gateway": {
+    "authEnabled": false,
+    "hassDiscovery": true,
+    "discoveryPrefix": "homeassistant",
+    "logEnabled": true,
+    "logLevel": "debug"
+  },
+  "backup": {
+    "storeBackup": true,
+    "storeCron": "0 0 * * *",
+    "storeKeep": 7,
+    "nvmBackup": true,
+    "nvmBackupOnEvent": true,
+    "nvmCron": "0 0 * * *",
+    "nvmKeep": 7
+  },
+  "zwave": {
+    "enabled": true,
+    "port": "/dev/zwave"
   }
 }
