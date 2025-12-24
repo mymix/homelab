@@ -72,6 +72,22 @@ spec:
             mountPath: /config-src
           - name: apps-homeassistant-pvc
             mountPath: /config
+      - name: sync-solaredge-custom-components
+        image: alpine/git:2.45.2
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            set -e
+            dest="/config/custom_components/solaredge_modbus"
+            tmpdir="$(mktemp -d)"
+            git clone --depth 1 https://github.com/binsentsu/home-assistant-solaredge-modbus.git "$tmpdir"
+            mkdir -p /config/custom_components
+            rm -rf "$dest"
+            cp -a "$tmpdir/custom_components/solaredge_modbus" "$dest"
+            chown -R 1000:1000 /config/custom_components
+        volumeMounts:
+          - name: apps-homeassistant-pvc
+            mountPath: /config
 
     persistence:
       enabled: true
