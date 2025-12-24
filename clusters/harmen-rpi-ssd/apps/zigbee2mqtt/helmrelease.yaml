@@ -50,5 +50,3 @@ spec:
       serial:
         adapter: deconz
         port: "/dev/serial/by-id/deconz"
-    
-    
