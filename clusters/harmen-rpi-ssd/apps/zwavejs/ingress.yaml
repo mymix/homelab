@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: zwavejs
+  namespace: zwavejs
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: zwavejs.home.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: zwavejs
+                port:
+                  number: 8091

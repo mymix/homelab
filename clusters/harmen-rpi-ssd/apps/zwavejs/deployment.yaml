@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zwavejs
+  namespace: zwavejs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zwavejs
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: zwavejs
+    spec:
+      hostNetwork: false
+      containers:
+        - name: zwavejs
+          image: ghcr.io/zwave-js/zwave-js-ui:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8091
+            - name: ws
+              containerPort: 3000
+          env:
+            - name: TZ
+              value: Europe/Amsterdam
+            - name: ZWAVEJS_EXTERNAL_CONFIG
+              value: "true"
+            - name: ZWAVEJS_STORE_DIR
+              value: /usr/src/app/store
+            - name: MQTT_HOST
+              value: mqtt://mosquitto.home.lan
+            - name: MQTT_PORT
+              value: "1883"
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/app/store
+            # - name: usb
+              # mountPath: /dev/ttyACM0
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: zwavejs-data
+        # - name: usb
+          # hostPath:
+            # path: /dev/ttyACM0
+            # type: CharDevice
