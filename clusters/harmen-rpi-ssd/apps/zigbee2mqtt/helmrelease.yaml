@@ -47,6 +47,13 @@ spec:
     zigbee2mqtt:
       mqtt:
         server: "mqtt://mosquitto.home.lan:1883"
+      # advanced:
+      #   network_key: '!secret network_key'
+      #   pan_id: '!secret pan_id'
+      #   channel: '!secret channel'
       serial:
         adapter: deconz
         port: "/dev/serial/by-id/deconz"
+      # secret:
+      #   create: true
+      #   existingSecret: zigbee2mqtt-network
