@@ -19,7 +19,7 @@ spec:
     fullnameOverride: zigbee2mqtt
 
     statefulset:
-      nodeSelector: harmen-rpi-ssd
+      # nodeSelector: harmen-rpi-ssd
       volumes:
         - name: usb
           hostPath:
