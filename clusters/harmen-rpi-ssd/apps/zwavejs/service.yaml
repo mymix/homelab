@@ -13,4 +13,4 @@ spec:
       port: 3000
       targetPort: websocket
   selector:
-    name: zwavejs
+    app: zwavejs
