@@ -6,6 +6,7 @@ configMapGenerator:
     files:
       - config/configuration.yaml
       - config/homekit.yaml
+      - config/mqtt.yaml
 generatorOptions:
   disableNameSuffixHash: true
 resources:
