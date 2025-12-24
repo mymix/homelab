@@ -27,6 +27,7 @@
   },
   "zwave": {
     "enabled": true,
-    "port": "/dev/zwave"
+    "port": "/dev/zwave",
+    "enableStatistics": false
   }
 }
