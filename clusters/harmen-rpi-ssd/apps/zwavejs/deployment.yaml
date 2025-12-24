@@ -50,16 +50,32 @@ spec:
           env:
             - name: TZ
               value: Europe/Amsterdam
-            - name: ZWAVEJS_EXTERNAL_CONFIG
-              value: "true"
-            - name: ZWAVEJS_STORE_DIR
-              value: /usr/src/app/store
-            - name: MQTT_HOST
-              value: mqtt://mosquitto.home.lan
-            - name: MQTT_PORT
-              value: "1883"
+            # - name: ZWAVEJS_EXTERNAL_CONFIG
+            #   value: "true"
+            # - name: ZWAVEJS_STORE_DIR
+            #   value: /usr/src/app/store
             - name: TRUST_PROXY
               value: "10.42.0.0/16" # traefik internal cluster CIDR
+            - name: KEY_S0_Legacy
+              valueFrom:
+                secretKeyRef:
+                  name: zwavejs-securitykeys
+                  key: S0_LEGACY_KEY
+            # - name: S2_ACCESS_CONTROL_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: zwavejs-securitykeys
+            #       key: S2_ACCESS_CONTROL_KEY
+            # - name: S2_AUTHENTICATED_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: zwavejs-securitykeys
+            #       key: S2_AUTHENTICATED_KEY
+            # - name: S2_UNAUTHENTICATED_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: zwavejs-securitykeys
+            #       key: S2_UNAUTHENTICATED_KEY
           securityContext:
             privileged: true
           volumeMounts:
@@ -67,10 +83,16 @@ spec:
               mountPath: /usr/src/app/store
             - name: zwave-usb
               mountPath: /dev/zwave
+            - name: zwave-config
+              mountPath: /usr/src/app/store/settings.json
+              subPath: settings.json
       volumes:
         - name: zwave-data
           persistentVolumeClaim:
             claimName: zwavejs-data
+        - name: zwave-config
+          configMap:
+            name: zwavejs-settings
         - name: zwave-usb
           hostPath:
             path: "/dev/serial/by-id/usb-0658_0200-if00"

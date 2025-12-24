@@ -1,0 +1,14 @@
+{
+  "ui": {
+    "port": 8091,
+    "host": "0.0.0.0",
+    "useHttps": false
+  },
+  "mqtt": {
+    "server": "mqtt://mosquitto.home.lan:1883",
+    "name": "zwavejs"
+  },
+  "securityKeys": {
+    "S0_Legacy": "REPLACE_WITH_HEX_KEY_4"
+  }
+}
