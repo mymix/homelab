@@ -7,7 +7,7 @@
   "mqtt": {
     "host": "mqtt://mosquitto.home.lan",
     "port": 1883,
-    "prefix": "zwave"
+    "prefix": "zwavejs"
   },
   "gateway": {
     "authEnabled": false,
