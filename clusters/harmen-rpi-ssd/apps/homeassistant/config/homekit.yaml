@@ -3,5 +3,8 @@
     filter:
       include_domains:
         - climate
-      # include_entity_globs:
-        # - sensor.*_humidity
+  - name: HOMEKIT-BRDG-LIGHTS
+    port: 21066
+    filter:
+      include_domains:
+        - light
