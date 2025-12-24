@@ -15,6 +15,8 @@ spec:
       labels:
         app: deconz
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: harmen-rpi-ssd
       containers:
         - name: deconz
           image: deconzcommunity/deconz:latest
@@ -26,19 +28,19 @@ spec:
             - name: TZ
               value: Europe/Amsterdam
             - name: DECONZ_DEVICE
-              value: /dev/ttyACM1
+              value: /dev/serial/by-id/deconz
           securityContext:
             privileged: true
           volumeMounts:
             - name: config
               mountPath: /opt/deCONZ
-            # - name: usb
-              # mountPath: /dev/ttyACM1
+            - name: usb
+              mountPath: /dev/serial/byid/deconz
       volumes:
         - name: config
           persistentVolumeClaim:
             claimName: deconz-data
-        # - name: usb
-          # hostPath:
-            # path: /dev/ttyACM1
-            # type: CharDevice
+        - name: usb
+          hostPath:
+            path: /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2456829-if00
+            type: CharDevice
