@@ -45,10 +45,10 @@ spec:
               fi
 
               TMP_FILE="$(mktemp)"
-              MERGED="$(jq -s '
-                def names:
-                  (.[1] // {}) 
-                  | [.. | objects | to_entries[]? 
+              RESULT="$(jq -s '
+                def names($data):
+                  ($data[1] // {})
+                  | [.. | objects | to_entries[]?
                      | select((.key|tostring) | test("^-?\\d+$"))
                      | { (.key|tostring):
                          (if (.value|type) == "string" then .value
@@ -71,19 +71,28 @@ spec:
                     )
                   else . end;
 
-                def merge_names:
-                  (names) as $n
-                  | if ($n == {}) then .
-                    else if has("nodes") then .nodes |= apply($n) else apply($n) end
-                    end;
-
-                (.[0] // {}) | merge_names
+                ($data := .; $n := names($data)) |
+                {
+                  merged: (
+                    if ($n == {}) then $data[0] // {}
+                    else
+                      ($data[0] // {}) | if has("nodes") then .nodes |= apply($n) else apply($n) end
+                    end
+                  ),
+                  keys: ($n | keys)
+                }
               ' "$NODES_FILE" "$MAP_FILE")"
 
-              printf "%s\n" "$MERGED" > "$TMP_FILE"
+              NAME_KEYS="$(printf '%s' "$RESULT" | jq -r '.keys | join(\",\")')"
+              if [ -z "$NAME_KEYS" ]; then
+                echo "No node names found in mapping; nothing to update."
+                exit 0
+              fi
+
+              printf "%s\n" "$RESULT" | jq '.merged' > "$TMP_FILE"
               mv "$TMP_FILE" "$NODES_FILE"
 
-              echo "Applied node names from $MAP_FILE with priority."
+              echo "Applied node names: $NAME_KEYS"
           volumeMounts:
             - name: zwave-data
               mountPath: /usr/src/app/store
