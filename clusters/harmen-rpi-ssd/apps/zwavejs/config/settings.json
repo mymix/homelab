@@ -32,7 +32,7 @@
     "port": "/dev/zwave",
     "enableStatistics": false,
     "serverEnabled": true,
-    "serverPort": 3000,
+    "serverPort": 3000
   }
   
 }
