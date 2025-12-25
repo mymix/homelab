@@ -4,19 +4,19 @@
       "name": "HARMEN-ZWAVE-STICK"
     },
     "2": {
-      "name": "dimmer 1"
+      "name": "HARMEN-DIMMER-HALLWAY"
     },
     "3": {
-      "name": "dimmer 2"
+      "name": "HARMEN-DIMMER-LIVINGROOM"
     },
     "4": {
-      "name": "dimmer 3"
+      "name": "HARMEN-DIMMER-DININGTABLE"
     },
     "5": {
-      "name": "dimmer 4"
+      "name": "HARMEN-DIMMER-4"
     },
     "6": {
-      "name": "dimmer 5"
+      "name": "HARMEN-DIMMER-5"
     }
   }
 }
