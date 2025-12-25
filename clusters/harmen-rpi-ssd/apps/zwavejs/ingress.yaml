@@ -16,3 +16,13 @@ spec:
                 name: zwavejs
                 port:
                   name: http
+    - host: websockets.zwavejs.home.lan
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: zwavejs
+                port:
+                  name: websocket

@@ -4,7 +4,7 @@ metadata:
   name: zwavejs
   namespace: zwavejs
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: http
       port: 80
