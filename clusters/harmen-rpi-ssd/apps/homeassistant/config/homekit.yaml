@@ -8,3 +8,8 @@
     filter:
       include_domains:
         - light
+  - name: HOMEKIT-BRDG-SWITCHES
+    port: 21067
+    filter:
+      include_domains:
+        - switch
