@@ -19,6 +19,77 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: harmen-rpi-ssd
+      initContainers:
+        - name: apply-node-names
+          image: alpine:3.19
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+              apk add --no-cache jq >/dev/null
+
+              NODES_FILE="/usr/src/app/store/nodes.json"
+              MAP_FILE="/config/node-names.json"
+              export NODES_FILE MAP_FILE
+
+              if [ ! -s "$MAP_FILE" ]; then
+                echo "Node mapping file $MAP_FILE missing or empty; skipping rename."
+                exit 0
+              fi
+
+              if [ ! -f "$NODES_FILE" ]; then
+                echo "No nodes.json found, creating empty file."
+                mkdir -p "$(dirname "$NODES_FILE")"
+                echo "{}" > "$NODES_FILE"
+              fi
+
+              TMP_FILE="$(mktemp)"
+              MERGED="$(jq -s '
+                def names:
+                  (.[1] // {}) 
+                  | [.. | objects | to_entries[]? 
+                     | select((.key|tostring) | test("^-?\\d+$"))
+                     | { (.key|tostring):
+                         (if (.value|type) == "string" then .value
+                          elif (.value|type) == "object" then (.value.name // empty)
+                          else empty end)
+                       }
+                    ] | add // {};
+
+                def apply($n):
+                  if type=="object" then
+                    reduce ($n|to_entries[]) as $e (.;
+                      .[$e.key] |= ((. // {}) | .name = $e.value)
+                    )
+                  elif type=="array" then
+                    map(
+                      if (type=="object") and ($n|has((.id//""|tostring)))
+                      then (.name = $n[(.id//""|tostring)])
+                      else .
+                      end
+                    )
+                  else . end;
+
+                def merge_names:
+                  (names) as $n
+                  | if ($n == {}) then .
+                    else if has("nodes") then .nodes |= apply($n) else apply($n) end
+                    end;
+
+                (.[0] // {}) | merge_names
+              ' "$NODES_FILE" "$MAP_FILE")"
+
+              printf "%s\n" "$MERGED" > "$TMP_FILE"
+              mv "$TMP_FILE" "$NODES_FILE"
+
+              echo "Applied node names from $MAP_FILE with priority."
+          volumeMounts:
+            - name: zwave-data
+              mountPath: /usr/src/app/store
+            - name: zwave-config
+              mountPath: /config
+              readOnly: true
       containers:
         - name: zwavejs
           image: ghcr.io/zwave-js/zwave-js-ui:latest

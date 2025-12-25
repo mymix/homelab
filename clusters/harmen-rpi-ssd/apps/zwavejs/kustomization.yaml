@@ -5,6 +5,7 @@ configMapGenerator:
   - name: zwavejs-settings
     files:
       - config/settings.json
+      - config/node-names.json
 generatorOptions:
   disableNameSuffixHash: true
 resources:
