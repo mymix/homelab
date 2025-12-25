@@ -71,16 +71,18 @@ spec:
                     )
                   else . end;
 
-                ($data := .; $n := names($data)) |
-                {
-                  merged: (
-                    if ($n == {}) then $data[0] // {}
-                    else
-                      ($data[0] // {}) | if has("nodes") then .nodes |= apply($n) else apply($n) end
-                    end
-                  ),
-                  keys: ($n | keys)
-                }
+                . as $data
+                | (names($data)) as $n
+                | ($data[0] // {}) as $nodes
+                | {
+                    merged: (
+                      if ($n == {}) then $nodes
+                      else
+                        ($nodes | if has("nodes") then .nodes |= apply($n) else apply($n) end)
+                      end
+                    ),
+                    keys: ($n | keys)
+                  }
               ' "$NODES_FILE" "$MAP_FILE")"
 
               NAME_KEYS="$(printf '%s' "$RESULT" | jq -r '.keys | join(\",\")')"
