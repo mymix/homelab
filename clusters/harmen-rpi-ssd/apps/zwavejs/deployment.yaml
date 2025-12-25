@@ -85,7 +85,7 @@ spec:
                   }
               ' "$NODES_FILE" "$MAP_FILE")"
 
-              NAME_KEYS="$(printf '%s' "$RESULT" | jq -r '.keys | join(\",\")')"
+              NAME_KEYS="$(printf '%s' "$RESULT" | jq -r '.keys | join(",")')"
               if [ -z "$NAME_KEYS" ]; then
                 echo "No node names found in mapping; nothing to update."
                 exit 0
