@@ -11,10 +11,12 @@
   },
   "gateway": {
     "authEnabled": false,
+    "nodeNames": true,
     "hassDiscovery": true,
     "discoveryPrefix": "homeassistant",
     "logEnabled": true,
-    "logLevel": "debug"
+    "logLevel": "debug",
+    "logToFile": false
   },
   "backup": {
     "storeBackup": true,
@@ -28,6 +30,9 @@
   "zwave": {
     "enabled": true,
     "port": "/dev/zwave",
-    "enableStatistics": false
+    "enableStatistics": false,
+    "serverEnabled": true,
+    "serverPort": 3000,
   }
+  
 }
