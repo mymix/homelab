@@ -26,6 +26,6 @@
   - name: HK-BRDG-MOTION
     port: 21070
     filter:
-      include_domains:
-        - binary_sensor
-        - sensor
+      include_entity_globs:
+      - binary_sensor.*motion*
+      - sensor.*motion*
