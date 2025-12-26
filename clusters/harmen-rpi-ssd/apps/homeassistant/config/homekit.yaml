@@ -13,3 +13,8 @@
     filter:
       include_domains:
         - switch
+  - name: HOMEKIT-BRDG-INPUT-BUTTONS
+    port: 21068
+    filter:
+      include_domains:
+        - input_button
