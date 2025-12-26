@@ -1,0 +1,171 @@
+blueprint:
+  name: Fibaro Dimmer 2 scenes
+  description: >
+    Triggers actions from the Fibaro Dimmer 2 (FGD-212) Z-Wave JS scene events for S1 and S2.
+    Supports single, double, triple, hold, and release on both inputs.
+  domain: automation
+  input:
+    device:
+      name: Fibaro Dimmer 2 device
+      description: Select the Z-Wave JS device for this dimmer.
+      selector:
+        device:
+          integration: zwave_js
+          manufacturer: Fibargroup
+          model: FGD212
+    s1_single:
+      name: S1 single press
+      default: []
+      selector:
+        action: {}
+    s1_double:
+      name: S1 double press
+      default: []
+      selector:
+        action: {}
+    s1_triple:
+      name: S1 triple press
+      default: []
+      selector:
+        action: {}
+    s1_hold:
+      name: S1 hold
+      default: []
+      selector:
+        action: {}
+    s1_release:
+      name: S1 release
+      default: []
+      selector:
+        action: {}
+    s2_single:
+      name: S2 single press
+      default: []
+      selector:
+        action: {}
+    s2_double:
+      name: S2 double press
+      default: []
+      selector:
+        action: {}
+    s2_triple:
+      name: S2 triple press
+      default: []
+      selector:
+        action: {}
+    s2_hold:
+      name: S2 hold
+      default: []
+      selector:
+        action: {}
+    s2_release:
+      name: S2 release
+      default: []
+      selector:
+        action: {}
+
+trigger:
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input device
+      property: scene
+      property_key: "001"
+      value: KeyPressed
+    id: s1_single
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input device
+      property: scene
+      property_key: "001"
+      value: KeyPressed2x
+    id: s1_double
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input device
+      property: scene
+      property_key: "001"
+      value: KeyPressed3x
+    id: s1_triple
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input device
+      property: scene
+      property_key: "001"
+      value: KeyHeldDown
+    id: s1_hold
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input device
+      property: scene
+      property_key: "001"
+      value: KeyReleased
+    id: s1_release
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input device
+      property: scene
+      property_key: "002"
+      value: KeyPressed
+    id: s2_single
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input device
+      property: scene
+      property_key: "002"
+      value: KeyPressed2x
+    id: s2_double
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input device
+      property: scene
+      property_key: "002"
+      value: KeyPressed3x
+    id: s2_triple
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input device
+      property: scene
+      property_key: "002"
+      value: KeyHeldDown
+    id: s2_hold
+  - platform: event
+    event_type: zwave_js_value_notification
+    event_data:
+      device_id: !input device
+      property: scene
+      property_key: "002"
+      value: KeyReleased
+    id: s2_release
+
+action:
+  - choose:
+      - conditions: "{{ trigger.id == 's1_single' }}"
+        sequence: !input s1_single
+      - conditions: "{{ trigger.id == 's1_double' }}"
+        sequence: !input s1_double
+      - conditions: "{{ trigger.id == 's1_triple' }}"
+        sequence: !input s1_triple
+      - conditions: "{{ trigger.id == 's1_hold' }}"
+        sequence: !input s1_hold
+      - conditions: "{{ trigger.id == 's1_release' }}"
+        sequence: !input s1_release
+      - conditions: "{{ trigger.id == 's2_single' }}"
+        sequence: !input s2_single
+      - conditions: "{{ trigger.id == 's2_double' }}"
+        sequence: !input s2_double
+      - conditions: "{{ trigger.id == 's2_triple' }}"
+        sequence: !input s2_triple
+      - conditions: "{{ trigger.id == 's2_hold' }}"
+        sequence: !input s2_hold
+      - conditions: "{{ trigger.id == 's2_release' }}"
+        sequence: !input s2_release
+    default: []
