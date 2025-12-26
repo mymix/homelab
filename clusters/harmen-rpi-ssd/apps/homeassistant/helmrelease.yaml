@@ -81,21 +81,20 @@ spec:
             # copy blueprints from configmap to /config/blueprints/
             mkdir -p /config/blueprints/automation
             cp -a /blueprints-automation-src/. /config/blueprints/automation/
+            find /config/blueprints -type f -maxdepth 2
 
             # copy automations from configmap to /config/automations
             mkdir -p /config/automation/dimmers
             cp -a /automation-dimmers-src/. /config/automation/dimmers/
+            find /config/automation -type f -maxdepth 2
 
             # copy helpers from configmap to /config/helpers
             mkdir -p /config/helpers
             cp -a /helpers-src/. /config/helpers/
+            find /config/helpers -type f -maxdepth 2
 
             # set correct ownership
             chown -R 1000:1000 /config
-
-            # show all files in /config for debugging
-            echo "Files in /config:"
-            find /config -type f -maxdepth 3
         volumeMounts:
           - name: ha-config-src
             mountPath: /config-src
