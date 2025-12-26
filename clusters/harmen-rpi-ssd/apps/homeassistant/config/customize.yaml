@@ -4,7 +4,12 @@ light.harmen_dimmer_diningtable:
 light.harmen_dimmer_diningtable_2:
   friendly_name: Schakelaar eettafel
   device_class: button
-  enabled: false
+light.harmen_dimmer_livingroom:
+  friendly_name: Lamp zithoek
+  icon: mdi:chandelier
+light.harmen_dimmer_livingroom_2:
+  friendly_name: Schakelaar zithoek
+  device_class: button
 light.harmen_dimmer_hallway:
   friendly_name: Lamp gang
   icon: mdi:ceiling-light
