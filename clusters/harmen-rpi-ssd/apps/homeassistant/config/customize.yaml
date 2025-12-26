@@ -1,0 +1,5 @@
+light.harmen_dimmer_diningtable:
+  friendly_name: "Lamp eettafel"
+light.harmen_dimmer_diningtable_2:
+  friendly_name: "Schakelaar eettafel"
+  disabled: false

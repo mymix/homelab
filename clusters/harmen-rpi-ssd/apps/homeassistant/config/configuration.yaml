@@ -33,6 +33,8 @@ homeassistant:
   temperature_unit: C
   external_url: "http://homeassistant.home.lan"
 
+  customize: !include customize.yaml
+
 # Configure Home Assistant to work behind a reverse proxy
 http:
   use_x_forwarded_for: true
