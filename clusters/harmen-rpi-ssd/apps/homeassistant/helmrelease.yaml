@@ -84,7 +84,7 @@ spec:
 
             # copy automations from configmap to /config/automations
             mkdir -p /config/automation/dimmers
-            cp -a /automation-dimmers-src/. /config/automations/dimmers/
+            cp -a /automation-dimmers-src/. /config/automation/dimmers/
 
             # copy helpers from configmap to /config/helpers
             mkdir -p /config/helpers
