@@ -92,13 +92,17 @@ spec:
 
             # set correct ownership
             chown -R 1000:1000 /config
+
+            # show all files in /config for debugging
+            echo "Files in /config:"
+            find /config -type f -maxdepth 3
         volumeMounts:
           - name: ha-config-src
             mountPath: /config-src
-          - name: ha-blueprints-src
-            mountPath: /blueprints-src
-          - name: ha-automations-src
-            mountPath: /automations-src
+          - name: ha-blueprints-automation-src
+            mountPath: /blueprints-automation-src
+          - name: ha-automation-dimmers-src
+            mountPath: /automation-dimmers-src
           - name: ha-helpers-src
             mountPath: /helpers-src
           - name: apps-homeassistant-pvc
