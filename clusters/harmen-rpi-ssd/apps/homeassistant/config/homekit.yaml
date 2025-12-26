@@ -13,6 +13,8 @@
     filter:
       include_domains:
         - switch
+      exclude_entity_globs:
+        - switch.*kinderslot
   - name: HK-BRDG-BUTTONS
     port: 21068
     filter:
