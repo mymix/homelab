@@ -99,10 +99,13 @@ max_exceeded: silent
 variables:
   presence: !input presence_entity
   lux_sensor: !input lux_entity
+  target_light: !input target_light
   lux_low: !input lux_low
   lux_high: !input lux_high
   b_max: !input brightness_max
   b_min: !input brightness_min
+  only_set_brightness_when_turning_on: !input only_set_brightness_when_turning_on
+  only_turn_off_if_clear: !input only_turn_off_if_clear
 
 trigger:
   - platform: state
@@ -130,8 +133,8 @@ action:
       - conditions:
           - condition: template
             value_template: >
-              {{ not ( !input only_set_brightness_when_turning_on )
-                 or is_state((!input target_light).entity_id, 'off') }}
+              {{ (not only_set_brightness_when_turning_on)
+                 or is_state(target_light.entity_id, 'off') }}
         sequence:
           - service: light.turn_on
             target: !input target_light
@@ -147,7 +150,7 @@ action:
   - choose:
       - conditions:
           - condition: template
-            value_template: "{{ not ( !input only_turn_off_if_clear ) }}"
+            value_template: "{{ not only_turn_off_if_clear }}"
         sequence:
           - service: light.turn_off
             target: !input target_light
