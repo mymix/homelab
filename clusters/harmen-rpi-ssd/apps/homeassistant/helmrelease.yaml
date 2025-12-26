@@ -114,6 +114,8 @@ spec:
             mountPath: /automation-dimmers-src
           - name: ha-automation-motion-src
             mountPath: /automation-motion-src
+          - name: ha-automation-lights-src
+            mountPath: /automation-lights-src
           - name: ha-helpers-src
             mountPath: /helpers-src
           - name: apps-homeassistant-pvc
