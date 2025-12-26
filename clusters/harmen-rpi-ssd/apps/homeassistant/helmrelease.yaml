@@ -58,9 +58,15 @@ spec:
       - name: ha-config-src
         configMap:
           name: ha-config
-      - name: ha-blueprints-automation-src
+      - name: ha-blueprints-src
         configMap:
-          name: ha-blueprints-automation
+          name: ha-blueprints
+      - name: ha-automations-src
+        configMap:
+          name: ha-automations
+      - name: ha-helpers-src
+        configMap:
+          name: ha-helpers
     initContainers:
       - name: seed-config
         image: busybox:1.36
@@ -72,9 +78,9 @@ spec:
             # copy config files from configmap to /config
             cp -a /config-src/. /config/
 
-            # copy blueprints from configmap to /config/blueprints
+            # copy blueprints from configmap to /config/blueprints/automation
             mkdir -p /config/blueprints/automation
-            cp -a /blueprints-src/. /config/blueprints/
+            cp -a /blueprints-src/. /config/blueprints/automation/
 
             # copy automations from configmap to /config/automations
             mkdir -p /config/automations
