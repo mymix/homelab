@@ -11,7 +11,7 @@ use_blueprint:
     duration: "00:03:00"
     lux_low: 20
     lux_high: 200
-    brightness_max: 100
+    brightness_max: 60
     brightness_min: 0
     transition: 1
     only_set_brightness_when_turning_on: true
