@@ -5,10 +5,8 @@ configMapGenerator:
   - name: ha-config
     files:
       - config/configuration.yaml
-      - config/automations.yaml
       - config/homekit.yaml
       - config/mqtt.yaml
-      - config/helpers.yaml
   - name: ha-blueprints
     files:
       - blueprints/automation/zwavejs_fibaro_dimmer2_scenes.yaml=config/blueprints/automation/zwavejs_fibaro_dimmer2_scenes.yaml
