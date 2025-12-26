@@ -13,15 +13,11 @@
     filter:
       include_domains:
         - switch
-  - name: HK-BRDG-INPUT-BUTTONS
+  - name: HK-BRDG-BUTTONS
     port: 21068
     filter:
       include_domains:
         - input_button
-  - name: HK-BRDG-BUTTONS
-    port: 21069
-    filter:
-      include_domains:
         - button
   - name: HK-BRDG-MOTION
     port: 21070
