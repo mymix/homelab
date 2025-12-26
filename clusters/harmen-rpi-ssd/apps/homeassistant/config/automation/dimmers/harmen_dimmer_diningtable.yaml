@@ -6,8 +6,8 @@ use_blueprint:
     s2_once:
       - service: input_button.press
         target:
-          entity_id: input_button.HARMEN_DIMMER_DININGTABLE_SECONDARY_SINGLE
+          entity_id: input_button.harmen_dimmer_diningtable_secondary_single
     s2_twice:
       - service: input_button.press
         target:
-          entity_id: input_button.HARMEN_DIMMER_DININGTABLE_SECONDARY_DOUBLE
+          entity_id: input_button.harmen_dimmer_diningtable_secondary_double
