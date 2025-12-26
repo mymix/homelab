@@ -52,4 +52,4 @@ mqtt: !include mqtt.yaml
 automation: !include_dir_list automation
 # script: !include scripts.yaml
 # scene: !include scenes.yaml
-input_buttons: !include helpers/input_buttons.yaml
+input_button: !include helpers/input_buttons.yaml
