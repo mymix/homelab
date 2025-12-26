@@ -1,0 +1,30 @@
+id: group_toggle_livingroom
+alias: Klik schakelaar → alles aan/uit (groep-toggled)
+mode: single
+
+trigger:
+  - platform: state
+    entity_id: button.harmen_dimmer_diningtable_secondary_single
+
+variables:
+  targets:
+    - switch.harmen_light_bookshelf
+    - switch.harmen_light_dressoir_left
+    - switch.harmen_light_dressoir_right
+
+action:
+  - choose:
+      # Als ALLES aan is → alles uit
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ expand(targets) | selectattr('state','eq','on') | list | count == (targets | count) }}
+        sequence:
+          - service: switch.turn_off
+            target:
+              entity_id: "{{ targets }}"
+    # Anders (alles uit of deels aan) → alles aan
+    default:
+      - service: switch.turn_on
+        target:
+          entity_id: "{{ targets }}"

@@ -18,6 +18,9 @@ configMapGenerator:
   - name: ha-automation-motion
     files:
       - config/automation/motion/motion_light_hallway.yaml
+  - name: ha-automation-lights
+    files:
+      - config/automation/lights/group_toggle_livingroom.yaml
   - name: ha-helpers
     files:
       - config/helpers/input_buttons.yaml

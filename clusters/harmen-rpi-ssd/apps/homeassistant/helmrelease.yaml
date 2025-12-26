@@ -67,6 +67,9 @@ spec:
       - name: ha-automation-motion-src
         configMap:
           name: ha-automation-motion
+      - name: ha-automation-lights-src
+        configMap:
+          name: ha-automation-lights
       - name: ha-helpers-src
         configMap:
           name: ha-helpers
@@ -91,6 +94,8 @@ spec:
             cp -a /automation-dimmers-src/. /config/automation/dimmers/
             mkdir -p /config/automation/motion
             cp -a /automation-motion-src/. /config/automation/motion/
+            mkdir -p /config/automation/lights
+            cp -a /automation-lights-src/. /config/automation/lights/
             find /config/automation -type f -maxdepth 2
 
             # copy helpers from configmap to /config/helpers
