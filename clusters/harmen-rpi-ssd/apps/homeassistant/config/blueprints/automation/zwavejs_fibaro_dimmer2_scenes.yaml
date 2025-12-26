@@ -83,9 +83,9 @@ action:
               - conditions: "{{ trigger.event.data.value == 26 }}"
                 sequence: !input s2_single_click
               - conditions: "{{ trigger.event.data.value == 24 }}"
-                sequence: !input s2_triple_click
+                sequence: !input s2_double_click
               - conditions: "{{ trigger.event.data.value == 25 }}"
-                sequence: !input s2_hold
+                sequence: !input s2_triple_click
               - conditions: "{{ trigger.event.data.value == 22 }}"
                 sequence: !input s2_hold
               - conditions: "{{ trigger.event.data.value == 23 }}"
