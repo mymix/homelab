@@ -1,7 +1,8 @@
 light.harmen_dimmer_diningtable:
   friendly_name: "Lamp eettafel"
+  name: "Lamp eettafel-not frienldy"
   icon: "mdi:chandelier"
 light.harmen_dimmer_diningtable_2:
   friendly_name: "Schakelaar eettafel"
   device_class: button
-  disabled: false
+  enabled: false
