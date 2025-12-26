@@ -4,15 +4,10 @@ use_blueprint:
   input:
     device: HARMEN-DIMMER-DININGTABLE
     s2_single:
-      - service: logbook.log
-        data:
-          name: Fibaro Dimmer 2
-          message: S2 single press
+      - service: input_button.press
+        target:
+          entity_id: input_button.HARMEN_DIMMER_DININGTABLE_SECONDARY_SINGLE
     s2_double:
-      - service: input_boolean.turn_on
+      - service: input_button.press
         target:
-          entity_id: input_boolean.hk_fibaro_double
-      - delay: "00:00:01"
-      - service: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.hk_fibaro_double
+          entity_id: input_button.HARMEN_DIMMER_DININGTABLE_SECONDARY_DOUBLE
