@@ -1,4 +1,6 @@
-# harmen_dimmer_diningtable_secondary_single:
-#   name: HARMEN-DIMMER-DININGTABLE-SECONDARY-SINGLE
-# harmen_dimmer_diningtable_secondary_double:
-#   name: HARMEN-DINNER-DINIGTABLE-SECONDARY-DOUBLE
+harmen_dimmer_diningtable_secondary_single:
+  name: "Eettafel – secondary single"
+harmen_dimmer_diningtable_secondary_double:
+  name: "Eettafel – secondary double"
+harmen_dimmer_diningtable_secondary_triple:
+  name: "Eettafel – secondary triple"

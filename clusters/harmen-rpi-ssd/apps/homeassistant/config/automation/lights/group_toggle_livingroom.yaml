@@ -4,7 +4,7 @@ mode: single
 
 trigger:
   - platform: state
-    entity_id: button.harmen_dimmer_diningtable_secondary_single
+    entity_id: input_button.harmen_dimmer_diningtable_secondary_single
 
 variables:
   targets:
