@@ -55,3 +55,4 @@ automation: !include_dir_list automation
 # script: !include scripts.yaml
 # scene: !include scenes.yaml
 input_button: !include helpers/input_buttons.yaml
+button: !include helpers/buttons.yaml

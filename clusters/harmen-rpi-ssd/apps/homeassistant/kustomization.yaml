@@ -17,6 +17,7 @@ configMapGenerator:
   - name: ha-helpers
     files:
       - config/helpers/input_buttons.yaml
+      - config/helpers/buttons.yaml
   
 generatorOptions:
   disableNameSuffixHash: true

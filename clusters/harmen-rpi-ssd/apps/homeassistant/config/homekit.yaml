@@ -18,3 +18,8 @@
     filter:
       include_domains:
         - input_button
+  - name: HK-BRDG-BUTTONS
+    port: 21069
+    filter:
+      include_domains:
+        - button
