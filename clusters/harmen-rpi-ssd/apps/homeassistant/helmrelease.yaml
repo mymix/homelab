@@ -68,15 +68,33 @@ spec:
         args:
           - |
             set -e
+
+            # copy config files from configmap to /config
             cp -a /config-src/. /config/
+
+            # copy blueprints from configmap to /config/blueprints
             mkdir -p /config/blueprints/automation
-            cp -a /blueprints-src/. /config/blueprints/automation/
+            cp -a /blueprints-src/. /config/blueprints/
+
+            # copy automations from configmap to /config/automations
+            mkdir -p /config/automations
+            cp -a /automations-src/. /config/automations/
+
+            # copy helpers from configmap to /config/helpers
+            mkdir -p /config/helpers
+            cp -a /helpers-src/. /config/helpers/
+
+            # set correct ownership
             chown -R 1000:1000 /config
         volumeMounts:
           - name: ha-config-src
             mountPath: /config-src
-          - name: ha-blueprints-automation-src
+          - name: ha-blueprints-src
             mountPath: /blueprints-src
+          - name: ha-automations-src
+            mountPath: /automations-src
+          - name: ha-helpers-src
+            mountPath: /helpers-src
           - name: apps-homeassistant-pvc
             mountPath: /config
       - name: sync-solaredge-custom-components

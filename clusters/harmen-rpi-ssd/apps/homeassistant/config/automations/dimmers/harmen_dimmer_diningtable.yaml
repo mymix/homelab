@@ -1,0 +1,18 @@
+alias: HARMEN-DIMMER-DININGTABLE - S2 Scenes
+use_blueprint:
+  path: zwavejs_fibaro_dimmer2_scenes.yaml
+  input:
+    device: HARMEN-DIMMER-DININGTABLE
+    s2_single:
+      - service: logbook.log
+        data:
+          name: Fibaro Dimmer 2
+          message: S2 single press
+    s2_double:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.hk_fibaro_double
+      - delay: "00:00:01"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.hk_fibaro_double
