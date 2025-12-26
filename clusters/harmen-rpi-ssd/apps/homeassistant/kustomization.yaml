@@ -7,7 +7,9 @@ configMapGenerator:
       - config/configuration.yaml
       - config/homekit.yaml
       - config/mqtt.yaml
-      - config/blueprints/automation/zwavejs/fibaro_dimmer2_scenes.yaml
+  - name: ha-blueprints-automation
+    files:
+      - config/blueprints/automation/
 generatorOptions:
   disableNameSuffixHash: true
 resources:

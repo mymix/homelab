@@ -58,6 +58,9 @@ spec:
       - name: ha-config-src
         configMap:
           name: ha-config
+      - name: ha-blueprints-automation-src
+        configMap:
+          name: ha-blueprints-automation
     initContainers:
       - name: seed-config
         image: busybox:1.36
@@ -66,10 +69,14 @@ spec:
           - |
             set -e
             cp -a /config-src/. /config/
+            mkdir -p /config/blueprints/automation
+            cp -a /blueprints-src/. /config/blueprints/automation/
             chown -R 1000:1000 /config
         volumeMounts:
           - name: ha-config-src
             mountPath: /config-src
+          - name: ha-blueprints-automation-src
+            mountPath: /blueprints-src
           - name: apps-homeassistant-pvc
             mountPath: /config
       - name: sync-solaredge-custom-components
