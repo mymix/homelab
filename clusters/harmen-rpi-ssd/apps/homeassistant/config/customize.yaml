@@ -3,5 +3,5 @@ light.harmen_dimmer_diningtable:
   icon: "mdi:chandelier"
 light.harmen_dimmer_diningtable_2:
   friendly_name: "Schakelaar eettafel"
-  device_class: input_button
+  device_class: button
   disabled: false
