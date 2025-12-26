@@ -23,3 +23,8 @@
     filter:
       include_domains:
         - button
+  - name: HK-BRDG-MOTION
+    port: 21070
+    filter:
+      include_domains:
+        - motion
