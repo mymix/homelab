@@ -9,7 +9,7 @@ configMapGenerator:
       - config/mqtt.yaml
   - name: ha-blueprints-automation
     files:
-      - config/blueprints/automation/clusters/harmen-rpi-ssd/apps/homeassistant/config/blueprints/automation/zwavejs_fibaro_dimmer2_scenes.yaml
+      - config/blueprints/automation/zwavejs_fibaro_dimmer2_scenes.yaml
 generatorOptions:
   disableNameSuffixHash: true
 resources:
