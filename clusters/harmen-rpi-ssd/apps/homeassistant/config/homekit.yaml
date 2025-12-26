@@ -1,19 +1,19 @@
-  - name: HOMEKIT-BRDG-CLIMATE
+  - name: HK-BRDG-CLIMATE
     port: 21065
     filter:
       include_domains:
         - climate
-  - name: HOMEKIT-BRDG-LIGHTS
+  - name: HK-BRDG-LIGHTS
     port: 21066
     filter:
       include_domains:
         - light
-  - name: HOMEKIT-BRDG-SWITCHES
+  - name: HK-BRDG-SWITCHES
     port: 21067
     filter:
       include_domains:
         - switch
-  - name: HOMEKIT-BRDG-INPUT-BUTTONS
+  - name: HK-BRDG-INPUT-BUTTONS
     port: 21068
     filter:
       include_domains:
