@@ -5,39 +5,54 @@ blueprint:
 
   input:
     zwavejs_device:
-      name: Z-Wave JS device
+      name: Z-Wave JS - Fibaro Dimmer 2
       selector:
         device:
           integration: zwave_js
           model: FGD212
 
-    s1_once:
-      name: S1 once
+    s1_single_click:
+      name: S1 Single Click
       selector: { action: {} }
       default: []
 
-    s1_twice:
-      name: S1 twice
+    s1_double_click:
+      name: S1 Double Click
       selector: { action: {} }
       default: []
 
     s1_hold:
-      name: S1 hold
+      name: S1 Hold
       selector: { action: {} }
       default: []
 
-    s2_once:
-      name: S2 once
+    s1_release:
+      name: S1 Hold
       selector: { action: {} }
       default: []
 
-    s2_twice:
-      name: S2 twice
+    s2_single_click:
+      name: S2 Single Click
+      selector: { action: {} }
+      default: []
+
+    s2_double_click:
+      name: S2 Double Click
+      selector: { action: {} }
+      default: []
+    
+    s2_triple_click:
+      name: S2 Triple Click
       selector: { action: {} }
       default: []
 
     s2_hold:
-      name: S2 hold
+      name: S2 Hold
+      selector: { action: {} }
+      default: []
+
+    s2_release:
+      name: S2 Release
       selector: { action: {} }
       default: []
 
@@ -58,14 +73,20 @@ action:
         sequence:
           - choose:
               - conditions: "{{ trigger.event.data.value == 16 }}"
-                sequence: !input s1_once
+                sequence: !input s1_single_click
               - conditions: "{{ trigger.event.data.value == 14 }}"
-                sequence: !input s1_twice
+                sequence: !input s1_double_click
               - conditions: "{{ trigger.event.data.value == 12 }}"
                 sequence: !input s1_hold
+              - conditions: "{{ trigger.event.data.value == 13 }}"
+                sequence: !input s1_release
               - conditions: "{{ trigger.event.data.value == 26 }}"
-                sequence: !input s2_once
+                sequence: !input s2_single_click
               - conditions: "{{ trigger.event.data.value == 24 }}"
-                sequence: !input s2_twice
+                sequence: !input s2_triple_click
+              - conditions: "{{ trigger.event.data.value == 25 }}"
+                sequence: !input s2_hold
               - conditions: "{{ trigger.event.data.value == 22 }}"
                 sequence: !input s2_hold
+              - conditions: "{{ trigger.event.data.value == 23 }}"
+                sequence: !input s2_release

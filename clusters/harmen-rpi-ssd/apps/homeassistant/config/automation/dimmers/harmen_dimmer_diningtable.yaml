@@ -1,13 +1,17 @@
-alias: HARMEN-DIMMER-DININGTABLE - S2 Scenes
+alias: HARMEN-DIMMER-DININGTABLE - Scenes
 use_blueprint:
   path: zwavejs_fibaro_dimmer2_scenes.yaml
   input:
     zwavejs_device: HARMEN-DIMMER-DININGTABLE
-    s2_once:
+    s2_single:
       - service: input_button.press
         target:
           entity_id: input_button.harmen_dimmer_diningtable_secondary_single
-    s2_twice:
+    s2_double:
       - service: input_button.press
         target:
           entity_id: input_button.harmen_dimmer_diningtable_secondary_double
+    s2_triple:
+      - service: input_button.press
+        target:
+          entity_id: input_button.harmen_dimmer_diningtable_secondary_triple
