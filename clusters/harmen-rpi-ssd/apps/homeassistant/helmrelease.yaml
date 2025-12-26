@@ -58,12 +58,12 @@ spec:
       - name: ha-config-src
         configMap:
           name: ha-config
-      - name: ha-blueprints-src
+      - name: ha-blueprints-automation-src
         configMap:
-          name: ha-blueprints
-      - name: ha-automations-src
+          name: ha-blueprints-automation
+      - name: ha-automation-dimmers-src
         configMap:
-          name: ha-automations
+          name: ha-automation-dimmers
       - name: ha-helpers-src
         configMap:
           name: ha-helpers
@@ -78,13 +78,13 @@ spec:
             # copy config files from configmap to /config
             cp -a /config-src/. /config/
 
-            # copy blueprints from configmap to /config/blueprints/automation
+            # copy blueprints from configmap to /config/blueprints/
             mkdir -p /config/blueprints/automation
-            cp -a /blueprints-src/. /config/blueprints/automation/
+            cp -a /blueprints-automation-src/. /config/blueprints/automation/
 
             # copy automations from configmap to /config/automations
-            mkdir -p /config/automations
-            cp -a /automations-src/. /config/automations/
+            mkdir -p /config/automation/dimmers
+            cp -a /automation-dimmers-src/. /config/automations/dimmers/
 
             # copy helpers from configmap to /config/helpers
             mkdir -p /config/helpers

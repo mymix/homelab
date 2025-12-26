@@ -7,15 +7,15 @@ configMapGenerator:
       - config/configuration.yaml
       - config/homekit.yaml
       - config/mqtt.yaml
-  - name: ha-blueprints
+  - name: ha-blueprints-automation
     files:
-      - blueprints/automation/zwavejs_fibaro_dimmer2_scenes.yaml=config/blueprints/automation/zwavejs_fibaro_dimmer2_scenes.yaml
-  - name: ha-automations
+      - config/blueprints/automation/zwavejs_fibaro_dimmer2_scenes.yaml
+  - name: ha-automation-dimmers
     files:
-      - automations/dimmer/harmen_dining_table.yaml=config/automations/dimmers/harmen_dimmer_diningtable.yaml
+      - config/automation/dimmers/harmen_dimmer_diningtable.yaml
   - name: ha-helpers
     files:
-      - helpers/input_buttons.yaml=config/helpers/input_buttons.yaml
+      - config/helpers/input_buttons.yaml
   
 generatorOptions:
   disableNameSuffixHash: true
