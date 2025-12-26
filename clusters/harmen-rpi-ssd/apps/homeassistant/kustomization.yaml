@@ -11,9 +11,13 @@ configMapGenerator:
   - name: ha-blueprints-automation
     files:
       - config/blueprints/automation/zwavejs_fibaro_dimmer2_scenes.yaml
+      - config/blueprints/automation/dynamic-light-based-on-presence-and-illuminance.yaml
   - name: ha-automation-dimmers
     files:
       - config/automation/dimmers/harmen_dimmer_diningtable.yaml
+  - name: ha-automation-motion
+    files:
+      - config/automation/motion/motion_light_hallway.yaml
   - name: ha-helpers
     files:
       - config/helpers/input_buttons.yaml

@@ -1,0 +1,18 @@
+id: automation_hallway_light_on_presence
+alias: Lamp gang - beweging/occupancy met lux-dimming
+mode: restart
+use_blueprint:
+  path: dynamic_light_based_on_presence_and_illuminance.yaml
+  input:
+    presence_entity: binary_sensor.harmen_motion_hallway_occupancy
+    lux_entity: sensor.harmen_motion_hallway_illuminance
+    target_light:
+      entity_id: light.harmen_dimmer_hallway
+    duration: "00:03:00"
+    lux_low: 20
+    lux_high: 200
+    brightness_max: 100
+    brightness_min: 0
+    transition: 1
+    only_set_brightness_when_turning_on: true
+    only_turn_off_if_clear: true

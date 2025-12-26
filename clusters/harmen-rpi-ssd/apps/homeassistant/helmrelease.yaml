@@ -64,6 +64,9 @@ spec:
       - name: ha-automation-dimmers-src
         configMap:
           name: ha-automation-dimmers
+      - name: ha-automation-motion-src
+        configMap:
+          name: ha-automation-motion
       - name: ha-helpers-src
         configMap:
           name: ha-helpers
@@ -86,6 +89,8 @@ spec:
             # copy automations from configmap to /config/automations
             mkdir -p /config/automation/dimmers
             cp -a /automation-dimmers-src/. /config/automation/dimmers/
+            mkdir -p /config/automation/motion
+            cp -a /automation-motion-src/. /config/automation/motion/
             find /config/automation -type f -maxdepth 2
 
             # copy helpers from configmap to /config/helpers
@@ -102,6 +107,8 @@ spec:
             mountPath: /blueprints-automation-src
           - name: ha-automation-dimmers-src
             mountPath: /automation-dimmers-src
+          - name: ha-automation-motion-src
+            mountPath: /automation-motion-src
           - name: ha-helpers-src
             mountPath: /helpers-src
           - name: apps-homeassistant-pvc

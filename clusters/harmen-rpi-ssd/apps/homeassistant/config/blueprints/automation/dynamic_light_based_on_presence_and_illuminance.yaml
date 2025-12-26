@@ -1,0 +1,164 @@
+blueprint:
+  name: Motion/Occupancy → Light for duration with lux-based brightness (single sensor)
+  description: Turn on a light for a set duration when presence is detected. Brightness scales with lux; optionally only set on initial turn-on.
+  domain: automation
+
+  input:
+    presence_entity:
+      name: Presence sensor (motion or occupancy)
+      selector:
+        entity:
+          domain: binary_sensor
+
+    lux_entity:
+      name: Lux sensor
+      selector:
+        entity:
+          domain: sensor
+          device_class: illuminance
+
+    target_light:
+      name: Light to control
+      selector:
+        target:
+          entity:
+            domain: light
+
+    duration:
+      name: On duration
+      default: "00:05:00"
+      selector:
+        duration: {}
+
+    lux_low:
+      name: Lux low threshold
+      default: 20
+      selector:
+        number:
+          min: 0
+          max: 2000
+          step: 1
+          unit_of_measurement: lx
+
+    lux_high:
+      name: Lux high threshold
+      default: 200
+      selector:
+        number:
+          min: 0
+          max: 5000
+          step: 1
+          unit_of_measurement: lx
+
+    brightness_max:
+      name: Max brightness (%)
+      default: 100
+      selector:
+        number:
+          min: 1
+          max: 100
+          step: 1
+          unit_of_measurement: "%"
+
+    brightness_min:
+      name: Min brightness (%)
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 100
+          step: 1
+          unit_of_measurement: "%"
+
+    transition:
+      name: Transition (seconds)
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 30
+          step: 1
+          unit_of_measurement: s
+
+    only_set_brightness_when_turning_on:
+      name: Only set brightness when light turns on
+      description: If true (default), brightness is not updated when the light is already on.
+      default: true
+      selector:
+        boolean: {}
+
+    only_turn_off_if_clear:
+      name: Only turn off if presence is off
+      default: true
+      selector:
+        boolean: {}
+
+mode: restart
+max_exceeded: silent
+
+variables:
+  presence: !input presence_entity
+  lux_sensor: !input lux_entity
+  lux_low: !input lux_low
+  lux_high: !input lux_high
+  b_max: !input brightness_max
+  b_min: !input brightness_min
+
+trigger:
+  - platform: state
+    entity_id: !input presence_entity
+    to: "on"
+
+action:
+  - variables:
+      lux: >
+        {% set v = states(lux_sensor) %}
+        {{ lux_low if v in ['unknown','unavailable','none',''] else v|float(lux_low) }}
+      brightness_pct: >
+        {% set lo = [lux_low, lux_high] | min %}
+        {% set hi = [lux_low, lux_high] | max %}
+        {% set l = [ [lux|float(lo), lo] | max, hi ] | min %}
+        {% if hi == lo %}
+          {{ b_max }}
+        {% else %}
+          {{ (b_max - ((l - lo) / (hi - lo)) * (b_max - b_min)) | round(0) }}
+        {% endif %}
+      brightness_pct_clamped: >
+        {{ [ [brightness_pct|int, b_min|int] | max, b_max|int ] | min }}
+
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ not ( !input only_set_brightness_when_turning_on )
+                 or is_state((!input target_light).entity_id, 'off') }}
+        sequence:
+          - service: light.turn_on
+            target: !input target_light
+            data:
+              brightness_pct: "{{ brightness_pct_clamped }}"
+              transition: !input transition
+    default:
+      - service: light.turn_on
+        target: !input target_light
+
+  - delay: !input duration
+
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ not ( !input only_turn_off_if_clear ) }}"
+        sequence:
+          - service: light.turn_off
+            target: !input target_light
+            data:
+              transition: !input transition
+      - conditions:
+          - condition: state
+            entity_id: !input presence_entity
+            state: "off"
+        sequence:
+          - service: light.turn_off
+            target: !input target_light
+            data:
+              transition: !input transition
