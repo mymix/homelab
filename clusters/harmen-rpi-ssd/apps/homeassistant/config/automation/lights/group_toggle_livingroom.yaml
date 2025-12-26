@@ -3,8 +3,7 @@ alias: Klik schakelaar → alles aan/uit (groep-toggled)
 mode: single
 
 trigger:
-  - platform: state
-    entity_id: input_button.harmen_dimmer_diningtable_secondary_single
+  - entity_id: input_button.harmen_dimmer_diningtable_secondary_single
 
 variables:
   targets:
