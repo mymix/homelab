@@ -3,15 +3,15 @@ use_blueprint:
   path: zwavejs_fibaro_dimmer2_scenes.yaml
   input:
     zwavejs_device: HARMEN-DIMMER-DININGTABLE
-    s2_single:
+    s2_single_click:
       - service: button.press
         target:
           entity_id: button.harmen_dimmer_diningtable_secondary_single
-    s2_double:
+    s2_double_click:
       - service: button.press
         target:
           entity_id: button.harmen_dimmer_diningtable_secondary_double
-    s2_triple:
+    s2_triple_click:
       - service: button.press
         target:
           entity_id: button.harmen_dimmer_diningtable_secondary_triple
