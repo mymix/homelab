@@ -27,4 +27,8 @@
     port: 21070
     filter:
       include_domains:
+        - binary_sensor
+        - sensor
+      include_device_classes:
         - motion
+        - illuminance
