@@ -4,14 +4,14 @@ use_blueprint:
   input:
     zwavejs_device: HARMEN-DIMMER-DININGTABLE
     s2_single_click:
-      - service: button.press
+      - service: input_button.press
         target:
-          entity_id: button.harmen_dimmer_diningtable_secondary_single
+          entity_id: input_button.harmen_dimmer_diningtable_secondary_single
     s2_double_click:
-      - service: button.press
+      - service: input_button.press
         target:
-          entity_id: button.harmen_dimmer_diningtable_secondary_double
+          entity_id: input_button.harmen_dimmer_diningtable_secondary_double
     s2_triple_click:
-      - service: button.press
+      - service: input_button.press
         target:
-          entity_id: button.harmen_dimmer_diningtable_secondary_triple
+          entity_id: input_button.harmen_dimmer_diningtable_secondary_triple
